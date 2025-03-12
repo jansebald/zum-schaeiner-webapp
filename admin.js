@@ -1,31 +1,55 @@
-// Daten aus localStorage laden
-function loadData(key, defaultValue) {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : defaultValue;
+// Daten aus data.json laden
+async function loadData() {
+    try {
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error('Daten konnten nicht geladen werden');
+        return await response.json();
+    } catch (error) {
+        console.error('Fehler beim Laden der Daten:', error);
+        return {
+            dailyOffers: {
+                "0": "Ruhetag - Kein Angebot",
+                "1": "Spießbraten mit Klößen - 6,50 €",
+                "2": "Hähnchenkeulen mit Pommes - 5,50 €",
+                "3": "Schnitzel mit Beilage - 6,00 €",
+                "4": "Bratwurst mit Sauerkraut - 4,50 €",
+                "5": "Fischfilet mit Kartoffelsalat - 7,00 €",
+                "6": "Gulasch mit Nudeln - 6,50 €"
+            },
+            menuItems: ["Currywurst - 3,50 €", "Pommes - 2,50 €"],
+            news: ["Neueröffnung am 15. März 2025!"],
+            openingHours: [],
+            images: {}
+        };
+    }
 }
 
-// Daten in localStorage speichern
-function saveData(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+// Daten in data.json speichern (manuell)
+async function saveData(data) {
+    try {
+        console.log('Daten zum Speichern:', JSON.stringify(data, null, 2));
+        alert('Bitte kopiere die Daten aus der Konsole, aktualisiere data.json im GitHub-Repository und lade die Seite neu.');
+    } catch (error) {
+        console.error('Fehler beim Speichern der Daten:', error);
+    }
 }
 
-// Temporäre Daten für Änderungen (werden erst mit "Speichern" übernommen)
-let tempOffers = loadData("dailyOffers", {
-    0: "Ruhetag - Kein Angebot",
-    1: "Spießbraten mit Klößen - 6,50 €",
-    2: "Hähnchenkeulen mit Pommes - 5,50 €",
-    3: "Schnitzel mit Beilage - 6,00 €",
-    4: "Bratwurst mit Sauerkraut - 4,50 €",
-    5: "Fischfilet mit Kartoffelsalat - 7,00 €",
-    6: "Gulasch mit Nudeln - 6,50 €"
+// Temporäre Daten für Änderungen
+let tempOffers, tempMenu, tempNews, tempImages, tempOpeningHours;
+
+loadData().then(data => {
+    console.log('Initial geladene Daten:', data); // Debugging-Ausgabe
+    tempOffers = { ...data.dailyOffers };
+    tempMenu = [...data.menuItems];
+    tempNews = [...data.news];
+    tempImages = { ...data.images };
+    tempOpeningHours = [...data.openingHours];
+    updateLists();
 });
-let tempMenu = loadData("menuItems", ["Currywurst - 3,50 €", "Pommes - 2,50 €"]);
-let tempNews = loadData("news", ["Neueröffnung am 15. März 2025!"]);
-let tempImages = loadData("images", {});
-let tempOpeningHours = loadData("openingHours", []);
 
 // Listen anzeigen
 function updateLists() {
+    console.log('Aktualisiere Listen...'); // Debugging-Ausgabe
     // Tagesangebote anzeigen
     const offerList = document.getElementById("offer-list");
     offerList.innerHTML = "";
@@ -194,12 +218,16 @@ document.getElementById("opening-hours-form").addEventListener("submit", functio
 
 // Speichern-Button
 document.getElementById("save-button").addEventListener("click", function() {
-    saveData("dailyOffers", tempOffers);
-    saveData("menuItems", tempMenu);
-    saveData("news", tempNews);
-    saveData("images", tempImages);
-    saveData("openingHours", tempOpeningHours);
-    alert("Änderungen wurden gespeichert!");
+    console.log('Speichern-Button geklickt'); // Debugging-Ausgabe
+    const data = {
+        dailyOffers: tempOffers,
+        menuItems: tempMenu,
+        news: tempNews,
+        images: tempImages,
+        openingHours: tempOpeningHours
+    };
+    saveData(data);
+    alert("Änderungen wurden in der Konsole angezeigt. Bitte aktualisiere data.json manuell im GitHub-Repository!");
     if ('Notification' in window && Notification.permission === "granted") {
         new Notification("Update", { body: "Neue Änderungen beim Zum Schäiner!" });
     } else if ('Notification' in window && Notification.permission !== "denied") {
@@ -209,7 +237,5 @@ document.getElementById("save-button").addEventListener("click", function() {
             }
         });
     }
+    window.location.reload();
 });
-
-// Initiale Anzeige
-window.onload = updateLists;
