@@ -5,7 +5,7 @@ const defaultOffers = {
     "2": "Hähnchenkeulen mit Pommes - 5,50 €",
     "3": "Schnitzel mit Beilage - 6,00 €",
     "4": "Bratwurst mit Sauerkraut - 4,50 €",
-    "5": "Fischfilet mit Kartoffelsalat - 7,00 €",
+    "5": "Sauerbraten - 7,00 €",
     "6": "Gulasch mit Nudeln - 6,50 €"
 };
 const defaultMenu = ["Currywurst - 3,50 €", "Pommes - 2,50 €"];
@@ -15,7 +15,7 @@ const defaultOpeningHours = [];
 // Daten aus data.json laden
 async function loadData() {
     try {
-        const response = await fetch('data.json');
+        const response = await fetch('data.json', { cache: 'no-store' }); // Cache deaktivieren
         if (!response.ok) throw new Error('Daten konnten nicht geladen werden');
         return await response.json();
     } catch (error) {
@@ -86,34 +86,28 @@ function displayData() {
 window.onload = displayData;
 
 // Automatische Aktualisierung alle 5 Sekunden
-setInterval(displayData, 5000);
+setInterval(() => {
+    displayData();
+    // Prüfen auf Updates
+    if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'CHECK_UPDATE' });
+    }
+}, 5000);
 
 // Service Worker registrieren und auf Updates prüfen
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
         .then(reg => {
             console.log('Service Worker registriert');
-            // Sofortiges Prüfen auf Updates
-            reg.update();
-            // Alle 60 Sekunden auf Updates prüfen
-            setInterval(() => reg.update(), 60000);
-
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        if (confirm('Eine neue Version der App ist verfügbar. Jetzt aktualisieren?')) {
-                            newWorker.postMessage({ action: 'skipWaiting' });
-                            window.location.reload();
-                        }
-                    }
-                });
-            });
         })
         .catch(err => console.log('Service Worker Fehler:', err));
-}
 
-// Service Worker-Message-Handler
-navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload();
-});
+    // Nachricht vom Service Worker empfangen
+    navigator.serviceWorker.addEventListener('message', event => {
+        if (event.data.type === 'UPDATE_AVAILABLE') {
+            if (confirm('Eine neue Version der Daten ist verfügbar. Jetzt aktualisieren?')) {
+                window.location.reload();
+            }
+        }
+    });
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'schaeiner-cache-v4'; // Neue Versionsnummer
+const CACHE_NAME = 'schaeiner-cache-v6'; // Neue Versionsnummer
 const urlsToCache = [
     '/',
     '/index.html',
@@ -6,12 +6,10 @@ const urlsToCache = [
     '/script.js',
     '/admin.html',
     '/admin.js',
-    '/manifest.json',
-    '/data.json',
-    '/assets/icon.png'
+    '/icon.png'
 ];
 
-// Cache beim Installieren
+// Cache beim Installieren (data.json wird nicht gecacht)
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -32,8 +30,20 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch-Event: Immer neue Daten vom Netzwerk holen, falls verfügbar
+// Fetch-Event: data.json immer vom Netzwerk holen
 self.addEventListener('fetch', event => {
+    const requestUrl = new URL(event.request.url);
+
+    // data.json immer vom Netzwerk holen, nicht cachen
+    if (requestUrl.pathname.endsWith('data.json')) {
+        event.respondWith(
+            fetch(event.request)
+                .catch(() => caches.match(event.request)) // Fallback auf Cache bei Offline
+        );
+        return;
+    }
+
+    // Für alle anderen Ressourcen: Netzwerk zuerst, dann Cache
     event.respondWith(
         caches.match(event.request)
             .then(response => {
@@ -49,9 +59,13 @@ self.addEventListener('fetch', event => {
     );
 });
 
-// Nachricht an Clients senden, um Aktualisierung zu erzwingen
+// Nachricht vom Client empfangen
 self.addEventListener('message', event => {
-    if (event.data.action === 'skipWaiting') {
-        self.skipWaiting();
+    if (event.data.type === 'CHECK_UPDATE') {
+        self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+                client.postMessage({ type: 'UPDATE_AVAILABLE' });
+            });
+        });
     }
 });
