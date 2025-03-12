@@ -1,0 +1,20 @@
+{
+    "dailyOffers": {
+      "0": "Ruhetag - Kein Angebot",
+      "1": "Spießbraten mit Klößen - 6,50 €",
+      "2": "Hähnchenkeulen mit Pommes - 5,50 €",
+      "3": "Schnitzel mit Beilage - 6,00 €",
+      "4": "Bratwurst mit Sauerkraut - 4,50 €",
+      "5": "Sauerbraten - 7,00 €",
+      "6": "Gulasch mit Nudeln - 6,50 €"
+    },
+    "menuItems": [
+      "Currywurst - 3,50 €",
+      "Pommes - 2,50 €"
+    ],
+    "news": [
+      "Neueröffnung am 15. März 2025!"
+    ],
+    "images": {},
+    "openingHours": []
+  }
