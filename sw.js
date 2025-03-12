@@ -6,7 +6,7 @@ const urlsToCache = [
     '/script.js',
     '/admin.html',
     '/admin.js',
-    '/icon.png'
+    '/assets/icon.png'
 ];
 
 // Cache beim Installieren (data.json wird nicht gecacht)
