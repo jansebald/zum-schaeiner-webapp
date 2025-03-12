@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #e0c6a6; /* Warme Brauntöne passend zum Logo */
+}
+
+header {
+    text-align: center;
+    padding: 10px;
+    background-color: #8b4513; /* Dunkles Braun */
+    color: white;
+}
+
+.logo {
+    max-width: 100%;
+    height: auto;
+}
+
+header p {
+    margin: 5px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #8b4513;
+    color: white;
+}
+
+section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f5e8c7; /* Helles Beige */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #8b4513;
+}
+
+form {
+    margin-bottom: 10px;
+}
+
+input, select {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #8b4513;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button:hover {
+    background-color: #6b2e0e;
+}
+
+#save-button {
+    background-color: #28a745;
+    padding: 10px 20px;
+    font-size: 1.2em;
+}
+
+#save-button:hover {
+    background-color: #218838;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login {
+    text-align: center;
+    padding: 20px;
+}
+
+#login input {
+    padding: 5px;
+    margin-right: 10px;
+}

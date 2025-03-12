@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Zum Schäiner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login">
+        <input type="password" id="admin-password" placeholder="Passwort">
+        <button id="login-button">Einloggen</button>
+    </div>
+
+    <div id="admin-content" style="display: none;">
+        <header>
+            <h1>Admin-Bereich</h1>
+        </header>
+
+        <section>
+            <h2>Tagesangebote bearbeiten</h2>
+            <form id="offer-form">
+                <select id="offer-day">
+                    <option value="0">Sonntag</option>
+                    <option value="1">Montag</option>
+                    <option value="2">Dienstag</option>
+                    <option value="3">Mittwoch</option>
+                    <option value="4">Donnerstag</option>
+                    <option value="5">Freitag</option>
+                    <option value="6">Samstag</option>
+                </select>
+                <input type="text" id="offer-input" placeholder="Tagesangebot">
+                <button type="submit">Hinzufügen/Bearbeiten</button>
+            </form>
+            <ul id="offer-list"></ul>
+        </section>
+
+        <section>
+            <h2>Speisekarte bearbeiten</h2>
+            <form id="menu-form">
+                <input type="text" id="menu-input" placeholder="Neues Gericht">
+                <button type="submit">Hinzufügen</button>
+            </form>
+            <ul id="menu-list"></ul>
+        </section>
+
+        <section>
+            <h2>Neuigkeiten bearbeiten</h2>
+            <form id="news-form">
+                <input type="text" id="news-input" placeholder="Neue Nachricht">
+                <button type="submit">Hinzufügen</button>
+            </form>
+            <ul id="news-list"></ul>
+        </section>
+
+        <section>
+            <h2>Bilder hochladen</h2>
+            <form id="image-form">
+                <select id="image-day">
+                    <option value="0">Sonntag</option>
+                    <option value="1">Montag</option>
+                    <option value="2">Dienstag</option>
+                    <option value="3">Mittwoch</option>
+                    <option value="4">Donnerstag</option>
+                    <option value="5">Freitag</option>
+                    <option value="6">Samstag</option>
+                </select>
+                <input type="file" id="image-input" accept="image/*">
+                <button type="submit">Hochladen</button>
+            </form>
+            <ul id="image-list"></ul>
+        </section>
+
+        <section>
+            <h2>Öffnungszeiten bearbeiten</h2>
+            <form id="opening-hours-form">
+                <input type="text" id="opening-hours-input" placeholder="z.B. Mo-Fr 11:00-20:00">
+                <button type="submit">Hinzufügen</button>
+            </form>
+            <ul id="opening-hours-list"></ul>
+        </section>
+
+        <section>
+            <button id="save-button">Änderungen speichern</button>
+        </section>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        document.getElementById("login-button").addEventListener("click", function() {
+            const password = document.getElementById("admin-password").value;
+            if (password === "schaeiner123") { // Passwort anpassen!
+                document.getElementById("admin-content").style.display = "block";
+                document.getElementById("login").style.display = "none";
+            } else {
+                alert("Falsches Passwort!");
+            }
+        });
+    </script>
+</body>
+</html>
