@@ -85,6 +85,7 @@ function displayData() {
 // Daten beim Laden der Seite anzeigen
 window.onload = displayData;
 
+/*
 // Automatische Aktualisierung alle 5 Sekunden
 setInterval(() => {
     displayData();
@@ -93,6 +94,7 @@ setInterval(() => {
         navigator.serviceWorker.controller.postMessage({ type: 'CHECK_UPDATE' });
     }
 }, 5000);
+*/
 
 // Service Worker registrieren und auf Updates prüfen
 if ('serviceWorker' in navigator) {
